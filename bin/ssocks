@@ -1,104 +1,29 @@
 #!/usr/bin/env node
 
-var net = require('net');
-var fs = require('fs');
-var utils = require('../utils');
+var Server = require('../server.js');
+var Telescope = require('../telescope.js');
+var Config = require('../config.js');
 
-var HOST = '127.0.0.1';
-var PORT = 5000;
-var DEVICE = '/dev/ttyUSB0'
+var config = new Config().readConfiguration();
 
-var serialPort = utils.getRawSerialPort(DEVICE);
-var serialData = '';
-//var serialPort = utils.getParsedSerialPort(DEVICE);
-
-
-// Create a server instance, and chain the listen function to it
-// The function passed to net.createServer() becomes the event handler for the 'connection' event
-// The sock object the callback function receives UNIQUE for each connection
-net.createServer(function(sock) {
-
-    var remoteAddress = sock.remoteAddress;
-    var remotePort = sock.remotePort;
-    sock.socketIsOpen = true;
-    
-    // We have a connection - a socket object is assigned to the connection automatically
-    console.log('CONNECTED: ' + remoteAddress +':'+ remotePort);
-
-    serialPort.removeAllListeners('data');
-    serialPort.on('data', function(data) {
-      //console.log('data received: ' + data);
-      handleData(sock.lastCommand, data);
-      if(sock.socketIsOpen)
-        sock.write(data);
-    });
-
-    sock.on('error', function(err) {
-	if(err != undefined)
-		console.log("ERROR: ", err);
-    });
-    
-    // Add a 'data' event handler to this instance of socket
-    sock.on('data', function(data) {
-	sock.lastCommand = data;
-        console.log('DATA ' + sock.remoteAddress + ': ' + data);
-        // Write the data back to the socket, the client will receive it as data from the server
-        serialPort.write(data, function(err){if(err != undefined) console.log(err);});
-    });
-    
-    // Add a 'close' event handler to this instance of socket
-    sock.on('close', function(data) {
-        console.log('CLOSED: ' + remoteAddress +':'+ remotePort);
-	sock.socketIsOpen = false;
-    });
-    
-}).listen(PORT);
-
-function handleData(lastCommand, data) {
-    response = '';
-    serialData += data.toString('utf-8');
-    if(serialData.match('#$')=='#') {
-	response = serialData.replace('#','');
-	serialData = ''
-    }
+process.on('uncaughtException', function(err) {
+    if(err.errno === 'EADDRINUSE')
+         console.log("ERROR: An existing process is already listening on port", config.port);
     else
-	return;
+         throw err;
+    process.exit(1);
+});
 
-    switch(lastCommand.toString('utf-8')) {
-	case 'e':
-	    parts = response.split(',');
-	    outputRaDecDegrees(parts[0], parts[1]);
-	    break;
-	case 't':
-	    console.log('get tracking mode');
-	    break;
-	case 'V#':
-	    console.log(data[0]);
-	    break;
-	default:
-	    if(lastCommand[0] == 114) {
-		    parts = lastCommand.toString('utf-8').replace('r','').split(',');
-		    outputRaDecDegrees(parts[0], parts[1]);
-	    }
-    }
-}
+var server = new Server(config.port);
+var telescope = new Telescope(config.device);
 
-function outputRaDecDegrees(ra, dec) {
-	ra_pct = parseInt(ra,16) / 4294967296;
-	ra_hrs = Math.floor(ra_pct * 24);
-	ra_min = Math.floor(((ra_pct * 24) - ra_hrs) * 60);
-	ra_sec = Math.round(((((ra_pct * 24) - ra_hrs) * 60) - ra_min) * 60 * 100) / 100;
-	console.log('RA:  ', ra_hrs + 'h ' + ra_min + 'm ' + ra_sec + 's');
+server.on('data', function(buffer) {
+    telescope.write(buffer);
+});
 
-	dec_pct = parseInt(dec,16) / 4294967296;
-	dec_deg = Math.floor(dec_pct * 360);
-	dec_arcm = Math.floor(((dec_pct * 360) - 360 - dec_deg) * 60);
-	dec_arcs = Math.floor(((((dec_pct * 360) - 360 - dec_deg) * 60) - dec_arcm) * 60);
-	console.log('DEC: ', dec_deg + chr(176) + ' ' + dec_arcm + chr(39) + ' ' + dec_arcs + chr(34));
-}
+telescope.on('data', function(buffer) {
+    server.write(buffer);
+});
 
-function chr(n) {
-	return String.fromCharCode(n);
-}
-
-console.log('Server listening port:'+ PORT);
+telescope.start();
+server.start();
