@@ -1,10 +1,11 @@
+```
   _________ __         .__  .__                _________              __            
  /   _____//  |_  ____ |  | |  | _____ _______/   _____/ ____   ____ |  | __  ______
  \_____  \\   __\/ __ \|  | |  | \__  \\_  __ \_____  \ /  _ \_/ ___\|  |/ / /  ___/
  /        \|  | \  ___/|  |_|  |__/ __ \|  | \/        (  <_> )  \___|    <  \___ \ 
 /_______  /|__|  \___  >____/____(____  /__| /_______  /\____/ \___  >__|_ \/____  >
         \/           \/               \/             \/            \/     \/     \/ 
-
+```
 ## Introduction
 
 The inspiration for StellarSocks is to control my telescope via my mobile device.  Many similar servers exist to allow remote connections or direct connections from a specific planetarium sofware application (e.g. Stellarium).  My goal is to make this application telescope, planetarium software, and protocol agnostic.
