@@ -32,11 +32,13 @@ By default the server will open a TCP socket on port `5000`, and connect to a te
 
 ## Installation
 
-There's nothing much to this.  This application uses core libraries with the exception of [serialport](https://github.com/voodootikigod/node-serialport). Serialport may require specific installation steps but rather than repeating them here, I recommend reading [voodootikigod's](https://github.com/voodootikigod) very detailed installation steps.
+There's nothing much to this. 
 
 ```
 npm install stellarsocks
 ```
+
+This application uses core libraries with the exception of [serialport](https://github.com/voodootikigod/node-serialport). Serialport may require specific installation steps but rather than repeating them here, I recommend reading [voodootikigod's](https://github.com/voodootikigod) very detailed installation steps.
 
 ## Usage
 

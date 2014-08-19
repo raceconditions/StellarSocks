@@ -1,11 +1,18 @@
 {
   "name": "stellar-socks",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "TCP server for interacting with a telescope via serial connection from planetarium software such as Stellarium and SkySafari.",
-  "main": "bin/ssocks",
+  "bugs": {
+	"url": "https://github.com/raceconditions/StellarSocks/issues",
+	"email": "raceconditions@gmail.com"
+  },
+  "main": "main.js",
+  "bin": {
+	"stellarsocks": "./bin/stellarsocks.js"
+  },
   "scripts": {
-    "test": "echo \"Error: no tests available\" && exit 1",
-    "start": "bin/ssocks"
+    "test": "echo \"Error: no tests yet!\" && exit 1",
+    "start": "bin/stellarsocks.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +27,13 @@
     "serial",
     "skysafari"
   ],
-  "author": "Travis Miller",
-  "license": "BSD"
+  "author": {
+    "name": "Travis Miller",
+    "email": "raceconditions@gmail.com",
+    "url": "http://blog.raceconditions.net"
+  },
+  "license": "LGPL-2.1+",
+  "dependencies": {
+    "serialport": "~1.4.5"
+  }
 }
