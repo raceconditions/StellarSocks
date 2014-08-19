@@ -4,7 +4,8 @@
   "description": "TCP server for interacting with a telescope via serial connection from planetarium software such as Stellarium and SkySafari.",
   "main": "bin/ssocks",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no tests available\" && exit 1",
+    "start": "bin/ssocks"
   },
   "repository": {
     "type": "git",

@@ -49,7 +49,7 @@ Complete the following steps:
 * Run the application using the following command:
 
 ```
-bin/ssocks
+npm start
 ```
 
 ## Troubleshooting
