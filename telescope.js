@@ -23,8 +23,9 @@ var Telescope = function(device) {
 
     var serialDevice = new serialport.SerialPort(device, {
 	baudrate: 9600,
-	parser: serialport.parsers.raw
-    }, false); // this is the openImmediately flag [default is true]
+	parser: serialport.parsers.raw,
+        autoOpen: false
+    });
 
     this.start = function() {
 	serialDevice.open(function () {
