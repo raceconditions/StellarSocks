@@ -34,6 +34,6 @@
   },
   "license": "LGPL-2.1+",
   "dependencies": {
-    "serialport": "~1.4.5"
+    "serialport": "~4.0.1"
   }
 }
