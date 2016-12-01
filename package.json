@@ -1,6 +1,6 @@
 {
   "name": "stellar-socks",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "TCP server for interacting with a telescope via serial connection from planetarium software such as Stellarium and SkySafari.",
   "bugs": {
 	"url": "https://github.com/raceconditions/StellarSocks/issues",

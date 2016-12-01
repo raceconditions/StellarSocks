@@ -21,16 +21,20 @@ var Telescope = function(device) {
     var self = this;
     self.lastCommand = '';
 
-    var serialDevice = new serialport.SerialPort(device, {
+    var serialDevice = new serialport(device, {
 	baudrate: 9600,
 	parser: serialport.parsers.raw,
         autoOpen: false
     });
 
     this.start = function() {
-	serialDevice.open(function () {
-	    console.log('OPENED serial connection to device:', device);
-	});
+        serialDevice.open(function (err) {
+            if(err == null) {
+                console.log('OPENED serial connection to device:', device);
+            } else {
+                console.log('FAILED to open serial connection:', err);
+            }
+        });
 
 	serialDevice.on('data', function(buffer){
 		self.emit('data', buffer);
